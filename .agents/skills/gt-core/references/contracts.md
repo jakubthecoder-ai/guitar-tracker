@@ -55,5 +55,5 @@ zadanie. Subagent nie rozmawia z użytkownikiem – pytania zwraca w `questions`
    {"start_min": 9, "minutes": 4, "kind": "path", "path_id": "…", "exercise_id": "…", "cue": "…"}
  ]}
 ```
-`kind`: `warmup | path | review | music | break`. Bloki rotacji tej samej pary ćwiczeń powtarzaj jako osobne
+`kind`: `warmup | path | review | music | break` (jam/utwór = `music`, mikroprzerwa = `break`). Bloki rotacji tej samej pary ćwiczeń powtarzaj jako osobne
 bloki (każdy można odhaczyć w raporcie).

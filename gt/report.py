@@ -21,6 +21,20 @@ def view_model(store, st: dict, today: date, server: dict | None = None) -> dict
             minutes_by_day[d] = minutes_by_day.get(d, 0) + ev["payload"]["minutes"]
     start = today - timedelta(days=today.weekday() + 7 * 11)  # Monday, 12 weeks back
     plan = st["plans"].get(today.isoformat())
+    logged_today = [e["payload"] for e in events if e["type"] in ("item_logged", "cold_check")
+                    and e["ts"][:10] == today.isoformat()]
+    done_blocks = []
+    if plan:
+        for i, b in enumerate(plan["blocks"]):
+            for p in logged_today:
+                if (b.get("exercise_id") and p.get("exercise_id") == b["exercise_id"]) or \
+                        (b.get("song_id") and p.get("song_id") == b["song_id"]) or \
+                        (b["kind"] == "warmup" and p.get("practice_type") == "warmup") or \
+                        (b["kind"] == "music" and p.get("practice_type") in ("jam", "runthrough")) or \
+                        (not b.get("exercise_id") and not b.get("song_id") and b.get("path_id")
+                         and p.get("path_id") == b["path_id"]):
+                    done_blocks.append(i)
+                    break
     preview = None
     if not plan and st["paths"]:
         preview = build_plan(st, store.config, today, 60)
@@ -37,6 +51,7 @@ def view_model(store, st: dict, today: date, server: dict | None = None) -> dict
         "exercises": st["exercises"],
         "songs": list(st["songs"].values()),
         "plan": plan,
+        "done_blocks": done_blocks,
         "plan_preview": preview,
         "volume": st["volume"],
         "days_since_practice": st["days_since_practice"],

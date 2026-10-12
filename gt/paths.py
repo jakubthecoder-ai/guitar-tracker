@@ -8,20 +8,23 @@ from .config import AXES, METRIC_TYPES
 
 # Keywords hinting that a goal spans more than one taxonomy axis.
 AXIS_KEYWORDS = {
-    "technique-picking": ["kostk", "picking", "downpick", "tremolo", "alternate"],
-    "technique-legato": ["legato", "tapping", "sweep", "hammer"],
-    "rhythm-timing": ["rytm", "timing", "metrum", "metronom", "groove", "7/8", "5/4"],
-    "fretboard-theory": ["teori", "gryf", "skal", "mod", "caged", "akord"],
-    "ear": ["słuch", "ze słuchu", "ear"],
-    "improvisation": ["improw", "solówk", "solo", "fraz"],
-    "tone-gear": ["brzmien", "sprzęt", "wzmacniacz", "efekt", "tone"],
+    "technique-picking": ["downpick", "alternate", "tremolo", "kostkowani", "economy", "hybrid picking"],
+    "technique-legato": ["legato", "tapping", "sweep"],
+    "rhythm-timing": ["metrum", "polirytm", "7/8", "5/4", "groove"],
+    "fretboard-theory": ["teori", "gryf", "caged", "skale modaln", "mody "],
+    "ear": ["ze słuchu", "słuchu", "trening słuchu"],
+    "improvisation": ["improwiz", "solówk", "frazowa"],
+    "tone-gear": ["brzmieni", "wzmacniacz", "efekty", "ustawienia helix"],
 }
 
 
 def slugify(text: str) -> str:
     t = unicodedata.normalize("NFKD", text.replace("ł", "l").replace("Ł", "L")).encode("ascii", "ignore").decode()
     t = re.sub(r"[^a-zA-Z0-9]+", "-", t).strip("-").lower()
-    return t[:40] or "sciezka"
+    if len(t) > 40:
+        cut = t[:41].rfind("-")
+        t = t[:cut] if cut >= 20 else t[:40]
+    return t or "sciezka"
 
 
 def unique_id(base: str, taken) -> str:

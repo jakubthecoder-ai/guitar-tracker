@@ -35,6 +35,20 @@ metadata:
 Nie używaj heredoców (`<<EOF`) ani plików tymczasowych – harnessy blokują je jako ryzykowne. Apostrof w tekście
 zastąp znakiem ’. `--from '<json>'` (stdin) i ścieżka pliku też działają, gdy harness na to pozwala.
 
+## Dozwolone wartości (używaj dokładnie tych)
+- `topic_axis`: `technique-picking` · `technique-legato` · `rhythm-timing` · `fretboard-theory` · `ear` ·
+  `repertoire` · `improvisation` · `tone-gear`
+- `primary_metric.type`: `bpm` · `song_status` · `minutes` · `custom`
+- stadium ćwiczenia (`stage`): `learn` · `stabilise` · `speed` · `apply` · `maintain`
+- `practice_type`: `targeted` · `new_material` · `runthrough` · `jam` · `warmup` · `cold_check`
+- status utworu: `backlog` · `learning` · `polishing` · `performance_ready` · `maintenance`
+- status ścieżki: `proposed` · `active` · `paused` · `review` · `done` · `dropped`
+- `priority`: 1–5 (5 = najważniejsza); `rating`, `tension`: 1–5; daty `RRRR-MM-DD`
+- Propozycje z placementu: `gt path list` → `open_proposals[].proposal_id`; przy tworzeniu ścieżki z propozycji
+  dodaj `"proposal_id": "<id>"` i `"created_from": "placement"` (propozycja zmieni status na `accepted`).
+
+Nie czytaj kodu `gt/` – wszystko, czego potrzebujesz, jest w tym skillu i w komunikatach błędów `gt`.
+
 ## Referencje (czytaj w razie potrzeby)
 - `references/contracts.md` – kontrakty wejścia/wyjścia subagentów, przykłady JSON.
 - `references/taxonomy.md` – 8 osi, poziomy L1–L5, progi tempa.

@@ -101,6 +101,8 @@ td.num { font-variant-numeric: tabular-nums; }
   padding: 8px 16px; border-radius: 8px; font-size: 14px; display: none; z-index: 10; max-width: calc(100% - 32px); }
 .hist li { margin-bottom: 6px; font-size: 14px; }
 .muted { color: var(--muted); }
+.stat-tile { background: var(--surface-2); border-radius: 8px; padding: 12px 16px; margin: 8px 0; }
+.stat-tile .hero { font-size: 32px; font-weight: 600; line-height: 1.2; margin: 4px 0; }
 .empty { color: var(--ink-2); font-size: 14px; }
 details summary { cursor: pointer; color: var(--ink-2); font-size: 13px; }
 </style>
@@ -303,12 +305,16 @@ function renderPlan() {
   if (!plan) { $("#plan").innerHTML = `<p class="empty">Brak planu. Uruchom sesję u mentora (np. „zagrajmy 60 min”).</p>`; return; }
   $("#plan-title").textContent = committed ? "Plan na dziś" : "Podgląd planu (60 min)";
   $("#plan-sub").textContent = committed ? `${plan.minutes} min · zatwierdzony` : "niezatwierdzony: mentor go dopracuje";
-  const done = new Set(store.get(DONE_KEY, []));
+  const done = new Set(store.get(DONE_KEY, []).concat((S.done_blocks || []).map((i) => `b${i}`)));
   let html = "";
   if (committed) {
     plan.blocks.forEach((b, i) => {
       const key = `b${i}`;
       const title = b.title || (b.exercise_id && S.exercises[b.exercise_id] ? S.exercises[b.exercise_id].title : b.kind);
+      if (b.kind === "break") {
+        html += `<div class="item meta" style="padding-left:26px">${b.start_min !== undefined ? `${b.start_min}′ ` : ""}☕ ${esc(title)} · ${b.minutes} min</div>`;
+        return;
+      }
       html += `<div class="item"><input type="checkbox" data-key="${key}" data-i="${i}" ${done.has(key) ? "checked disabled" : ""} aria-label="Zrobione">
         <div><div>${b.start_min !== undefined ? `<span class="muted">${b.start_min}′</span> ` : ""}<strong>${esc(title)}</strong> · ${b.minutes} min${b.bpm ? ` · ${b.bpm} BPM` : ""}</div>
         ${b.cue ? `<div class="meta">${esc(b.cue)}</div>` : ""}</div></div>`;
@@ -392,9 +398,16 @@ function lineChart(cfg) {
   const pts = cfg.series.flatMap((s) => s.points);
   const xs = pts.map((p) => p[0]).concat(cfg.xExtra || []);
   const ys = pts.map((p) => p[1]).concat(cfg.yExtra || []);
-  if (!pts.length) return `<p class="empty">Brak pomiarów. Pierwszy test na zimno ustawi punkt startowy.</p>`;
+  const distinctDays = new Set(pts.map((p) => p[0])).size;
+  if (distinctDays < 2) {
+    const last = pts.length ? pts[pts.length - 1][1] : null;
+    return `<div class="stat-tile"><div class="sub">${esc(cfg.label)}</div>
+      <div class="hero">${last !== null ? last : "–"}${cfg.target !== undefined ? `<span class="sub"> / cel ${cfg.target}</span>` : ""}</div>
+      <div class="sub">${pts.length ? "Pierwszy pomiar. Wykres trendu pojawi się po pomiarach z 2 różnych dni." : "Brak pomiarów. Pierwszy test na zimno ustawi punkt startowy."}</div></div>`;
+  }
   let x0 = Math.min(...xs), x1 = Math.max(...xs); if (x0 === x1) { x0 -= 3; x1 += 3; }
-  let y0 = Math.min(...ys), y1 = Math.max(...ys); const pad = Math.max(2, (y1 - y0) * 0.1); y0 = Math.floor(y0 - pad); y1 = Math.ceil(y1 + pad);
+  let y0 = Math.min(...ys), y1 = Math.max(...ys); const pad = Math.max(2, (y1 - y0) * 0.1);
+  const nonNeg = y0 >= 0; y0 = Math.floor(y0 - pad); y1 = Math.ceil(y1 + pad); if (nonNeg) y0 = Math.max(0, y0);
   const X = (v) => m.l + (v - x0) / (x1 - x0) * (W - m.l - m.r), Y = (v) => H - m.b - (v - y0) / (y1 - y0) * (H - m.t - m.b);
   let g = "";
   const ticks = 4;
@@ -485,7 +498,7 @@ function renderPaths() {
     }
     const pct = ms.progress !== null ? Math.round(ms.progress * 100) : null;
     const mss = p.milestones.map((mi) => `<li><span>${mi.reached ? "☑" : "☐"} ${esc(mi.desc || mi.id)}${mi.due ? ` <span class="muted">do ${shortDate(mi.due)}</span>` : ""}</span>
-      ${mi.reached ? `<span class="muted">${shortDate(mi.reached)}</span>` : (p.status === "active" ? `<button data-ms="${esc(mi.id)}" data-path="${esc(p.path_id)}">osiągnięty</button>` : "")}</li>`).join("");
+      ${mi.reached ? `<span class="muted">${shortDate(mi.reached)}</span>` : (p.status === "active" ? `<button data-ms="${esc(mi.id)}" data-path="${esc(p.path_id)}">zalicz ✓</button>` : "")}</li>`).join("");
     const exs = p.exercises.map((id) => S.exercises[id]).map((e) => `<tr><td>${esc(e.title)}</td><td>${e.stage}${e.suggested_stage ? ` <span class="badge">→ ${e.suggested_stage}?</span>` : ""}</td>
       <td class="num">${fmt(e.clean_bpm)}</td><td class="num">${fmt(e.candidate_bpm)}</td><td class="num">${fmt(e.bpm_target)}</td></tr>`).join("");
     return `<section class="card">

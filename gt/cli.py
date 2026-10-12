@@ -403,7 +403,8 @@ def cmd_state(ctx, args):
     st = ctx.state()
     if args.full:
         return out(st)
-    out({"ok": True, "as_of": st["as_of"], "profile_initialized": st["profile"] is not None,
+    out({"ok": True, "home": str(ctx.store.home), "as_of": st["as_of"],
+         "profile_initialized": st["profile"] is not None,
          "open_session": st["open_session"], "days_since_practice": st["days_since_practice"],
          "volume": st["volume"], "pending_changes": len(st["pending_changes"]),
          "open_proposals": [p["proposal_id"] for p in st["proposals"].values() if p["status"] == "open"],
