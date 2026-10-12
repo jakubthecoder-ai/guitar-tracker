@@ -40,6 +40,7 @@ bezpośrednio, subagenci nie wołają innych subagentów.
 | song-scout | `agents/song-scout.md` | mid | dobór utworów (komfort / cel / stretch) z weryfikacją |
 | profile-keeper | `agents/profile-keeper.md` | low | sygnały postępu/braku postępu → zmiany profilu |
 | report-builder | `agents/report-builder.md` | low | komentarz mentora + raport HTML |
+| audio-analyst | `agents/audio-analyst.md` | low | analiza timingu nagrań (`gt analyze`) |
 
 Kontrakt przekazania (wejście/wyjście JSON): `.agents/skills/gt-core/references/contracts.md`.
 Subagenci nie rozmawiają z użytkownikiem bezpośrednio: gdy potrzebują odpowiedzi, zwracają
@@ -55,7 +56,7 @@ wybranej ścieżki (równolegle), zamiast samemu generować ćwiczenia.
 
 W `.agents/skills/` (Claude Code widzi je przez symlink `.claude/skills`):
 `gt-core` (zasady, kontrakty, taksonomia, pedagogika), `gt-placement`, `gt-new-path`, `gt-session`, `gt-log`,
-`gt-report`, `gt-retro` (sygnały, żywy profil), `gt-songs` (dobór i weryfikacja utworów).
+`gt-report`, `gt-retro` (sygnały, żywy profil), `gt-songs` (dobór i weryfikacja utworów), `gt-analyze` (analiza nagrań).
 
 ## Dla deweloperów
 

@@ -61,7 +61,8 @@ SPECS = {
                       "length_s": ("int", False), "musicbrainz_id": ("str", False), "guitar_parts": ("list", False)},
     "song_status_changed": {"song_id": ("str", True), "status": (SONG_STATUSES, True), "note": ("str", False)},
     "mentor_note": {"text": ("str", True), "scope": ("str", False)},
-    "recording_analyzed": {"exercise_id": ("str", False), "file": ("str", True), "metrics": ("dict", True)},
+    "recording_analyzed": {"exercise_id": ("str", False), "song_id": ("str", False), "file": ("str", True),
+                           "metrics": ("dict", True), "note": ("str", False)},
 }
 
 METRIC_SPEC = {"type": (METRIC_TYPES, True), "target": ("num", True), "unit": ("str", False),

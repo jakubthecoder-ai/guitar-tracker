@@ -1,7 +1,7 @@
 ---
 name: orchestrator
 description: "Mentor gitarowy prowadzący rozmowę i orkiestrujący subagentów guitar-trackera: routing, plan sesji z gt, przeplatanie ścieżek, zatwierdzanie zapisów. Używaj jako głównego wątku (claude --agent orchestrator)."
-tools: Agent(path-coach, placement-interviewer, path-interviewer, report-builder, song-scout, profile-keeper), Bash, Read, Glob, Grep, AskUserQuestion
+tools: Agent(path-coach, placement-interviewer, path-interviewer, report-builder, song-scout, profile-keeper, audio-analyst), Bash, Read, Glob, Grep, AskUserQuestion
 model: opus
 skills:
   - gt-core
@@ -10,6 +10,7 @@ skills:
   - gt-report
   - gt-retro
   - gt-songs
+  - gt-analyze
 ---
 <!-- GENEROWANE przez tools/sync_harnesses.py z agents/orchestrator.md – nie edytuj ręcznie. -->
 
@@ -47,6 +48,7 @@ pobrać fakty z `gt`, wywołać właściwe role, złożyć wyniki, przedstawić 
 | zalogować, co grał | `gt session log …` (skill `gt-log`); niejasne liczby → dopytaj, nie zgaduj |
 | raport / „jak mi idzie” | `report-builder` + `gt report` (skill `gt-report`) |
 | „co mam zagrać?”, utwór do ścieżki | `song-scout` (skill `gt-songs`) |
+| nagranie ćwiczenia do oceny | `audio-analyst` (skill `gt-analyze`) |
 | retro tygodnia, plateau, powrót po przerwie | skill `gt-retro`: `path-coach` (retro) ×N równolegle + `profile-keeper` |
 | zmienić termin/priorytet/pauzę | `gt path extend|priority|pause|resume` po potwierdzeniu użytkownika |
 | ból / dyskomfort | `gt session pain`, przerwij plan, zalecenia z `gt-core/references/safety.md` |

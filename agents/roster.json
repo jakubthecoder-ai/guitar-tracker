@@ -49,7 +49,8 @@
         "path-interviewer",
         "report-builder",
         "song-scout",
-        "profile-keeper"
+        "profile-keeper",
+        "audio-analyst"
       ],
       "skills": [
         "gt-core",
@@ -57,7 +58,8 @@
         "gt-log",
         "gt-report",
         "gt-retro",
-        "gt-songs"
+        "gt-songs",
+        "gt-analyze"
       ]
     },
     "path-coach": {
@@ -129,6 +131,18 @@
       "skills": [
         "gt-core",
         "gt-retro"
+      ]
+    },
+    "audio-analyst": {
+      "tier": "low",
+      "description": "Analiza nagrań ćwiczeń w guitar-trackerze: uruchamia gt analyze (timing vs metronom lub tab GP) i zamienia metryki na 1–3 konkretne wskazówki techniczne.",
+      "tools": [
+        "shell",
+        "read"
+      ],
+      "skills": [
+        "gt-core",
+        "gt-analyze"
       ]
     }
   },

@@ -500,7 +500,16 @@ function renderPaths() {
     const mss = p.milestones.map((mi) => `<li><span>${mi.reached ? "☑" : "☐"} ${esc(mi.desc || mi.id)}${mi.due ? ` <span class="muted">do ${shortDate(mi.due)}</span>` : ""}</span>
       ${mi.reached ? `<span class="muted">${shortDate(mi.reached)}</span>` : (p.status === "active" ? `<button data-ms="${esc(mi.id)}" data-path="${esc(p.path_id)}">zalicz ✓</button>` : "")}</li>`).join("");
     const exs = p.exercises.map((id) => S.exercises[id]).map((e) => `<tr><td>${esc(e.title)}</td><td>${e.stage}${e.suggested_stage ? ` <span class="badge">→ ${e.suggested_stage}?</span>` : ""}</td>
-      <td class="num">${fmt(e.clean_bpm)}</td><td class="num">${fmt(e.candidate_bpm)}</td><td class="num">${fmt(e.bpm_target)}</td></tr>`).join("");
+      <td class="num">${fmt(e.clean_bpm)}</td><td class="num">${fmt(e.candidate_bpm)}</td><td class="num">${fmt(e.bpm_target)}</td><td class="num">${e.last_tension ? e.last_tension + "/5" : "–"}</td></tr>`).join("");
+    const recs = (S.recordings || []).filter((r) => r.exercise_id && p.exercises.includes(r.exercise_id)).slice(-5).reverse();
+    const recTable = recs.length ? `<div class="table-scroll" style="margin-top:12px"><h3>Nagrania (timing)</h3><table><thead><tr>
+      <th>Data</th><th>Ćwiczenie</th><th>BPM cel → realne</th><th>Odchylenie</th><th>Trend tempa</th><th>Rozjazd</th></tr></thead><tbody>${recs.map((r) => {
+        const m = r.metrics, ex = S.exercises[r.exercise_id] || {};
+        const trend = {speeding_up: "przyspiesza", slowing_down: "zwalnia", steady: "równe"}[m.tempo_trend] || "–";
+        return `<tr><td>${shortDate(r.ts.slice(0, 10))}</td><td>${esc(ex.title || "")}</td>
+          <td class="num">${fmt(m.bpm_target)} → ${fmt(m.bpm_actual)}</td><td class="num">±${fmt(m.timing_mean_abs_ms)} ms</td>
+          <td>${trend}</td><td>${m.breakdown_at_s !== null && m.breakdown_at_s !== undefined ? m.breakdown_at_s + " s" : "brak"}</td></tr>`;
+      }).join("")}</tbody></table></div>` : "";
     return `<section class="card">
       <div class="slot-head"><div><h2 style="margin:0">${esc(p.title)}</h2><div class="sub">${esc(p.goal)}</div></div>
         <div class="row">${riskBadge(ms.risk)}<span class="badge">${esc(p.status)}</span><span class="badge">P${p.priority}</span></div></div>
@@ -511,8 +520,8 @@ function renderPaths() {
       ${chart}
       <div class="grid2" style="margin-top:12px">
         <div><h3>Kamienie milowe</h3><ul class="ms">${mss || `<li class="empty">brak</li>`}</ul></div>
-        <div class="table-scroll"><h3>Ćwiczenia</h3>${exs ? `<table><thead><tr><th>Ćwiczenie</th><th>Stadium</th><th>Czyste</th><th>Kandydat</th><th>Cel</th></tr></thead><tbody>${exs}</tbody></table>` : `<p class="empty">brak</p>`}</div>
-      </div></section>`;
+        <div class="table-scroll"><h3>Ćwiczenia</h3>${exs ? `<table><thead><tr><th>Ćwiczenie</th><th>Stadium</th><th>Czyste</th><th>Kandydat</th><th>Cel</th><th title="Ostatnie napięcie 1–5">Napięcie</th></tr></thead><tbody>${exs}</tbody></table>` : `<p class="empty">brak</p>`}</div>
+      </div>${recTable}</section>`;
   }).join("");
   $("#paths").querySelectorAll("button[data-ms]").forEach((b) => b.onclick = () =>
     send([mkEvent("milestone_reached", {path_id: b.dataset.path, milestone_id: b.dataset.ms})], "Kamień milowy zaliczony!"));

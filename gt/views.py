@@ -63,7 +63,7 @@ def render_all(home: Path, st: dict) -> None:
         atomic_write(target / f"{r['week']}.md", f"{HEADER}\n# Retro {r['week']}\n\n{r['text']}\n")
     for eid, ex in st["exercises"].items():
         body = f"# {ex['title']}\n\n{ex.get('description', '')}\n"
-        meta = {k: v for k, v in ex.items() if k not in ("history", "description")}
+        meta = {k: v for k, v in ex.items() if k not in ("history", "log", "description")}
         atomic_write(home / "exercises" / f"{eid}.md", frontmatter_doc(meta, body))
     for sid, song in st["songs"].items():
         body = f"# {song['artist']} – {song['title']}\n\n{song.get('why', '')}\n"
@@ -109,7 +109,8 @@ def render_path(path: dict, st: dict) -> str:
     for eid in path["exercises"]:
         ex = st["exercises"][eid]
         lines.append(f"- `{eid}` {ex['title']} – stadium {ex['stage']}, czyste {ex['clean_bpm']}, "
-                     f"kandydat {ex['candidate_bpm']}, cel {ex.get('bpm_target')}")
+                     f"kandydat {ex['candidate_bpm']}, cel {ex.get('bpm_target')}, "
+                     f"ostatnie napięcie {ex.get('last_tension') or '–'}/5")
     if path["songs"]:
         lines += ["", "## Utwory", ""]
         for sid in path["songs"]:

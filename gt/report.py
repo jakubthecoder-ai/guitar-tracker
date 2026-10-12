@@ -57,6 +57,7 @@ def view_model(store, st: dict, today: date, server: dict | None = None) -> dict
         "days_since_practice": st["days_since_practice"],
         "open_session": st["open_session"],
         "notes": st["notes"][-5:],
+        "recordings": st["recordings"][-30:],
         "calendar": {"start": start.isoformat(), "days": (today - start).days + 1, "minutes": minutes_by_day},
         "server": server,
     }

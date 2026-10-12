@@ -122,7 +122,8 @@ def derive(events: list, config: dict, today: date) -> dict:
             ex.setdefault("stage", "learn")
             ex.setdefault("step_pct", config["bpm_step_pct"])
             ex.update(created=ts[:10], clean_bpm=None, candidate_bpm=None, burst_bpm=None, last_logged=None,
-                      history=[], stage_changed=ts[:10], maintain_reviews=0, minutes_total=0.0)
+                      history=[], log=[], stage_changed=ts[:10], maintain_reviews=0, minutes_total=0.0,
+                      last_tension=None, last_rating=None)
             st["exercises"][p["exercise_id"]] = ex
             if p["path_id"] in st["paths"]:
                 st["paths"][p["path_id"]]["exercises"].append(p["exercise_id"])
@@ -227,6 +228,13 @@ def _apply_log(st: dict, ev: dict, config: dict) -> None:
     if ex:
         ex["last_logged"] = day
         ex["minutes_total"] += p["minutes"]
+        for k in ("tension", "rating", "note"):
+            if p.get(k) is not None:
+                ex[f"last_{k}"] = p[k]
+        ex["log"].append({k: v for k, v in {"date": day, "minutes": p["minutes"], "bpm": p.get("bpm"),
+                                            "clean_reps": p.get("clean_reps"), "tension": p.get("tension"),
+                                            "rating": p.get("rating"), "note": p.get("note")}.items()
+                          if v is not None})
         if ex["stage"] == "maintain":
             ex["maintain_reviews"] += 1
         bpm = p.get("bpm")

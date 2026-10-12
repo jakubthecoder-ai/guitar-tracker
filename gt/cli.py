@@ -459,6 +459,49 @@ def cmd_signals(ctx, args):
          "pending_changes": st["pending_changes"]})
 
 
+SUBDIV_ALIASES = {"8ths": "8ths", "ósemki": "8ths", "16ths": "16ths", "szesnastki": "16ths", "triplets": "triplets",
+                  "triole": "triplets", "quarters": "quarters", "sextuplets": "sextuplets", "32nds": "32nds"}
+
+
+def cmd_analyze(ctx, args):
+    import subprocess
+    ctx.require_init()
+    st = ctx.state()
+    wav = Path(args.file).expanduser().resolve()
+    if not wav.is_file():
+        raise GtError(f"Brak pliku {wav}")
+    ex = None
+    if args.exercise_id:
+        if args.exercise_id not in st["exercises"]:
+            raise GtError(f"Nieznane ćwiczenie '{args.exercise_id}'")
+        ex = st["exercises"][args.exercise_id]
+    bpm = args.bpm or (ex and (ex["candidate_bpm"] or ex["clean_bpm"] or ex.get("bpm_start")))
+    sub = args.subdivision or SUBDIV_ALIASES.get(str((ex or {}).get("subdivision", "")).lower(), "8ths")
+    if not bpm and not args.gp:
+        raise GtError("Podaj --bpm (tempo metronomu z nagrania) albo --gp z tabulaturą")
+    if not shutil.which("uv"):
+        raise GtError("Analiza nagrań wymaga `uv` (https://docs.astral.sh/uv/) – instaluje numpy/librosa przy pierwszym "
+                      "uruchomieniu.")
+    cmd = ["uv", "run", "--quiet", str(Path(__file__).resolve().parents[1] / "gt_audio.py"), str(wav),
+           "--subdivision", sub]
+    if bpm:
+        cmd += ["--bpm", str(bpm)]
+    if args.gp:
+        cmd += ["--gp", str(Path(args.gp).expanduser().resolve()), "--track", str(args.track)]
+    r = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+    try:
+        res = json.loads(r.stdout.strip().splitlines()[-1])
+    except (json.JSONDecodeError, IndexError):
+        raise GtError("Analiza nie powiodła się", {"stderr": r.stderr[-1500:]})
+    if not res.get("ok"):
+        raise GtError(res.get("error", "Analiza nie powiodła się"), res)
+    metrics = {k: v for k, v in res.items() if k not in ("ok", "file", "caveat")}
+    ev = ctx.ev("recording_analyzed", {"exercise_id": args.exercise_id, "song_id": args.song_id, "file": str(wav),
+                                       "metrics": metrics, "note": args.note})
+    saved, _ = ctx.commit([ev], f"nagranie: {wav.name}")
+    out({"ok": True, "metrics": metrics, "caveat": res.get("caveat"), **saved})
+
+
 def cmd_validate(ctx, args):
     ctx.require_init()
     problems, ids = [], set()
@@ -602,6 +645,17 @@ def build_parser():
     s.set_defaults(fn=cmd_state)
     sub.add_parser("validate").set_defaults(fn=cmd_validate)
     sub.add_parser("signals", help="Sygnały postępu i braku postępu dla profile-keepera").set_defaults(fn=cmd_signals)
+
+    s = sub.add_parser("analyze", help="Analiza timingu nagrania (WAV/FLAC/MP3) względem metronomu lub tabu GP")
+    s.add_argument("file")
+    s.add_argument("--exercise", dest="exercise_id")
+    s.add_argument("--song", dest="song_id")
+    s.add_argument("--bpm", type=int)
+    s.add_argument("--subdivision", choices=sorted(set(SUBDIV_ALIASES.values())))
+    s.add_argument("--gp", help="Plik Guitar Pro 3–5 z oczekiwanymi nutami")
+    s.add_argument("--track", type=int, default=0)
+    s.add_argument("--note")
+    s.set_defaults(fn=cmd_analyze)
 
     s = sub.add_parser("report")
     s.add_argument("--out")
