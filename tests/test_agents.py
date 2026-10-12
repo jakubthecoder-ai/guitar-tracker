@@ -1,4 +1,6 @@
 import json
+import os
+import shutil
 import re
 import subprocess
 import sys
@@ -64,3 +66,61 @@ class TestRoster(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestHarnessFiles(unittest.TestCase):
+    def test_codex_toml_parses_with_required_fields(self):
+        import tomllib
+        files = sorted((ROOT / ".codex" / "agents").glob("*.toml"))
+        self.assertTrue(files)
+        for f in files:
+            d = tomllib.loads(f.read_text(encoding="utf-8"))
+            for k in ("name", "description", "developer_instructions"):
+                self.assertTrue(d.get(k), f"{f.name}: {k}")
+
+    def test_every_target_has_every_worker(self):
+        roster = json.loads((ROOT / "agents" / "roster.json").read_text())
+        workers = [r for r, s in roster["roles"].items() if not s.get("main")]
+        for d, ext in ((".claude/agents", ".md"), (".codex/agents", ".toml"), (".gemini/agents", ".md"),
+                       (".opencode/agents", ".md"), (".github/agents", ".agent.md")):
+            for w in workers:
+                self.assertTrue((ROOT / d / f"{w}{ext}").exists(), f"{d}/{w}{ext}")
+        self.assertEqual(json.loads((ROOT / ".gemini" / "settings.json").read_text())["context"]["fileName"],
+                         ["AGENTS.md"])
+
+
+@unittest.skipUnless(shutil.which("uv") and os.environ.get("GT_TEST_MCP", "1") == "1", "uv not available")
+class TestMcpServer(unittest.TestCase):
+    def test_tools_prompts_and_a_call(self):
+        import tempfile
+        client = '''
+# /// script
+# dependencies = ["mcp>=1.2,<2"]
+# ///
+import asyncio, json, os, sys
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+async def main():
+    p = StdioServerParameters(command="uv", args=["run", "--quiet", sys.argv[1]], env=dict(os.environ))
+    async with stdio_client(p) as (r, w):
+        async with ClientSession(r, w) as s:
+            await s.initialize()
+            tools = [t.name for t in (await s.list_tools()).tools]
+            prompts = [p.name for p in (await s.list_prompts()).prompts]
+            st = json.loads((await s.call_tool("get_state", {})).content[0].text)
+            print(json.dumps({"tools": tools, "prompts": prompts, "state_ok": st["ok"]}))
+asyncio.run(main())
+'''
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp) / "home"
+            subprocess.run([str(ROOT / "bin" / "gt"), "init", "--no-git"], env=dict(os.environ, GT_HOME=str(home)),
+                           capture_output=True, check=True)
+            script = Path(tmp) / "client.py"
+            script.write_text(client)
+            r = subprocess.run(["uv", "run", "--quiet", str(script), str(ROOT / "gt_mcp.py")], capture_output=True,
+                               text=True, timeout=240, env=dict(os.environ, GT_HOME=str(home)))
+            self.assertEqual(r.returncode, 0, r.stderr[-2000:])
+            out = json.loads(r.stdout.strip().splitlines()[-1])
+        self.assertGreaterEqual(len(out["tools"]), 25)
+        self.assertEqual(sorted(out["prompts"]), ["mentor", "new_path", "placement", "practice", "retro"])
+        self.assertTrue(out["state_ok"])

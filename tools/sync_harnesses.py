@@ -60,14 +60,72 @@ def render_claude(role: str, spec: dict, tiers: dict) -> str:
     return "\n".join(fm) + "\n" + HEADER.format(role=role) + "\n\n" + body_for(role, spec)
 
 
-TARGETS = {"claude": (ROOT / ".claude" / "agents", ".md", render_claude)}
+def _yaml_str(v: str) -> str:
+    return json.dumps(v, ensure_ascii=False)
+
+
+def render_codex(role: str, spec: dict, tiers: dict) -> str:
+    body = body_for(role, spec).replace("\\", "\\\\").replace('"""', '\\"\\"\\"')
+    lines = [f"# {HEADER.format(role=role)[5:-4]}", f"name = {_yaml_str(role)}",
+             f"description = {_yaml_str(spec['description'])}"]
+    for k, v in (tiers[spec["tier"]] or {}).items():
+        lines.append(f"{k} = {_yaml_str(v)}")
+    lines.append(f'developer_instructions = """\n{body}"""')
+    return "\n".join(lines) + "\n"
+
+
+def render_gemini(role: str, spec: dict, tiers: dict) -> str:
+    fm = ["---", f"name: {role}", f"description: {_yaml_str(spec['description'])}", "kind: local"]
+    if tiers.get(spec["tier"]):
+        fm.append(f"model: {tiers[spec['tier']]}")
+    fm += ["max_turns: 30", "---"]
+    return "\n".join(fm) + "\n" + HEADER.format(role=role) + "\n\n" + body_for(role, spec)
+
+
+def render_opencode(role: str, spec: dict, tiers: dict) -> str:
+    fm = ["---", f"description: {_yaml_str(spec['description'])}",
+          f"mode: {'primary' if spec.get('main') else 'subagent'}"]
+    if tiers.get(spec["tier"]):
+        fm.append(f"model: {tiers[spec['tier']]}")
+    fm += ["permission:", "  task:", '    "*": deny']
+    fm += [f"    {d}: allow" for d in spec.get("delegates", [])]
+    fm.append("---")
+    return "\n".join(fm) + "\n" + HEADER.format(role=role) + "\n\n" + body_for(role, spec)
+
+
+def render_copilot(role: str, spec: dict, tiers: dict) -> str:
+    tools = ["execute", "read", "search"] + (["agent"] if "agent" in spec["tools"] else [])
+    fm = ["---", f"name: {role}", f"description: {_yaml_str(spec['description'])}",
+          f"tools: [{', '.join(repr(t) for t in tools)}]"]
+    if tiers.get(spec["tier"]):
+        fm.append(f"model: {tiers[spec['tier']]}")
+    if not spec.get("main"):
+        fm.append("user-invocable: false")
+    fm.append("---")
+    return "\n".join(fm) + "\n" + HEADER.format(role=role) + "\n\n" + body_for(role, spec)
+
+
+GEMINI_SETTINGS = {"context": {"fileName": ["AGENTS.md"]}}
+
+# target -> (dir, ext, renderer, include main-thread role?)
+TARGETS = {
+    "claude": (ROOT / ".claude" / "agents", ".md", render_claude, True),
+    "codex": (ROOT / ".codex" / "agents", ".toml", render_codex, True),
+    "gemini": (ROOT / ".gemini" / "agents", ".md", render_gemini, False),  # main thread = AGENTS.md
+    "opencode": (ROOT / ".opencode" / "agents", ".md", render_opencode, True),
+    "copilot": (ROOT / ".github" / "agents", ".agent.md", render_copilot, True),
+}
 
 
 def generate(target: str) -> dict:
     roster = json.loads((AGENTS / "roster.json").read_text(encoding="utf-8"))
-    out_dir, ext, render = TARGETS[target]
+    out_dir, ext, render, with_main = TARGETS[target]
     tiers = roster["tiers"][target]
-    return {out_dir / f"{role}{ext}": render(role, spec, tiers) for role, spec in roster["roles"].items()}
+    files = {out_dir / f"{role}{ext}": render(role, spec, tiers) for role, spec in roster["roles"].items()
+             if with_main or not spec.get("main")}
+    if target == "gemini":
+        files[ROOT / ".gemini" / "settings.json"] = json.dumps(GEMINI_SETTINGS, indent=2) + "\n"
+    return files
 
 
 def main() -> int:

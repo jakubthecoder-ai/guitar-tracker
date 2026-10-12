@@ -4,6 +4,32 @@
       "top": "opus",
       "mid": "sonnet",
       "low": "haiku"
+    },
+    "codex": {
+      "top": {
+        "model_reasoning_effort": "high"
+      },
+      "mid": {
+        "model_reasoning_effort": "medium"
+      },
+      "low": {
+        "model_reasoning_effort": "low"
+      }
+    },
+    "opencode": {
+      "top": "anthropic/claude-opus-5-5",
+      "mid": "anthropic/claude-sonnet-5-5",
+      "low": "anthropic/claude-haiku-5-5"
+    },
+    "gemini": {
+      "top": null,
+      "mid": null,
+      "low": null
+    },
+    "copilot": {
+      "top": null,
+      "mid": null,
+      "low": null
     }
   },
   "roles": {
@@ -105,5 +131,6 @@
         "gt-retro"
       ]
     }
-  }
+  },
+  "_comment": "tiers: per-harness model mapping. null = inherit the harness default model. Set your own model ids here (e.g. Gemini/Copilot) and re-run tools/sync_harnesses.py."
 }
