@@ -1,36 +1,109 @@
 {
-  "tiers": {"claude": {"top": "opus", "mid": "sonnet", "low": "haiku"}},
+  "tiers": {
+    "claude": {
+      "top": "opus",
+      "mid": "sonnet",
+      "low": "haiku"
+    }
+  },
   "roles": {
     "orchestrator": {
-      "tier": "top", "main": true,
+      "tier": "top",
+      "main": true,
       "description": "Mentor gitarowy prowadzący rozmowę i orkiestrujący subagentów guitar-trackera: routing, plan sesji z gt, przeplatanie ścieżek, zatwierdzanie zapisów. Używaj jako głównego wątku (claude --agent orchestrator).",
-      "tools": ["agent", "shell", "read", "ask"],
-      "delegates": ["path-coach", "placement-interviewer", "path-interviewer", "report-builder"],
-      "skills": ["gt-core", "gt-session", "gt-log", "gt-report"]
+      "tools": [
+        "agent",
+        "shell",
+        "read",
+        "ask"
+      ],
+      "delegates": [
+        "path-coach",
+        "placement-interviewer",
+        "path-interviewer",
+        "report-builder",
+        "song-scout",
+        "profile-keeper"
+      ],
+      "skills": [
+        "gt-core",
+        "gt-session",
+        "gt-log",
+        "gt-report",
+        "gt-retro",
+        "gt-songs"
+      ]
     },
     "path-coach": {
       "tier": "mid",
       "description": "Opiekun JEDNEJ ścieżki guitar-trackera (path_id w zadaniu): blok ćwiczeń na dziś, tworzenie ćwiczeń, retro, ocena terminu. Wywołuj osobno i równolegle dla każdej ścieżki w sesji.",
-      "tools": ["shell", "read"],
-      "skills": ["gt-core"]
+      "tools": [
+        "shell",
+        "read"
+      ],
+      "skills": [
+        "gt-core"
+      ]
     },
     "placement-interviewer": {
       "tier": "mid",
       "description": "Wywiad wstępny guitar-trackera: pytania w rundach (needs_input), profil L1–L5 per oś, propozycje 2–4 ścieżek.",
-      "tools": ["shell", "read"],
-      "skills": ["gt-core", "gt-placement"]
+      "tools": [
+        "shell",
+        "read"
+      ],
+      "skills": [
+        "gt-core",
+        "gt-placement"
+      ]
     },
     "path-interviewer": {
       "tier": "mid",
       "description": "Wywiad nowej ścieżki guitar-trackera (jeden cel = jeden temat): pytania pogłębiające, baseline, kamienie milowe, realny deadline, gt path create.",
-      "tools": ["shell", "read"],
-      "skills": ["gt-core", "gt-new-path"]
+      "tools": [
+        "shell",
+        "read"
+      ],
+      "skills": [
+        "gt-core",
+        "gt-new-path"
+      ]
     },
     "report-builder": {
       "tier": "low",
       "description": "Krótki komentarz mentora do raportu HTML guitar-trackera na podstawie danych z gt; zapisuje notę i generuje raport.",
-      "tools": ["shell", "read"],
-      "skills": ["gt-core", "gt-report"]
+      "tools": [
+        "shell",
+        "read"
+      ],
+      "skills": [
+        "gt-core",
+        "gt-report"
+      ]
+    },
+    "song-scout": {
+      "tier": "mid",
+      "description": "Dobór utworów i fragmentów do ścieżki guitar-trackera (komfort / cel / stretch) z weryfikacją w Songsterr/MusicBrainz; dodaje wybrane utwory przez gt.",
+      "tools": [
+        "shell",
+        "read"
+      ],
+      "skills": [
+        "gt-core",
+        "gt-songs"
+      ]
+    },
+    "profile-keeper": {
+      "tier": "low",
+      "description": "Żywy profil guitar-trackera: interpretuje gt signals (postęp, plateau, zaniedbanie, opuszczone sesje, ryzyko terminu, zdrowie) i zapisuje zmiany profilu z uzasadnieniem.",
+      "tools": [
+        "shell",
+        "read"
+      ],
+      "skills": [
+        "gt-core",
+        "gt-retro"
+      ]
     }
   }
 }

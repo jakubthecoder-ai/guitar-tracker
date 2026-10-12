@@ -287,7 +287,10 @@ def cmd_session(ctx, args):
         res, st2 = ctx.commit([ctx.ev("session_ended", {"session_id": sid, "rating": args.rating, "note": args.note})],
                               f"sesja {ctx.today.isoformat()}")
         sess = next(s for s in st2["sessions"] if s["session_id"] == sid)
+        from .signals import compute_signals
         return out({"ok": True, **res, "session": sess,
+                    "signals": [x for x in compute_signals(st2, ctx.store.config, ctx.today)
+                                if x["severity"] != "info" or x["type"] in ("progress", "stage_ready")],
                     "stage_suggestions": {e["exercise_id"]: e["suggested_stage"] for e in st2["exercises"].values()
                                           if e["suggested_stage"]}})
     if a == "pain":
@@ -306,7 +309,15 @@ def cmd_song(ctx, args):
         data = read_json_arg(args.input)
         items = data if isinstance(data, list) else [data]
         events = []
+        from .songs import load_seed, seed_id
+        seed = {seed_id(x): x for x in load_seed()}
         for s in items:
+            if s.get("seed_id"):
+                if s["seed_id"] not in seed:
+                    raise GtError(f"Nieznany seed_id '{s['seed_id']}'")
+                base = seed[s.pop("seed_id")]
+                s = {"artist": base["artist"], "title": base["title"], "role": base["role"],
+                     "techniques": base["techniques"], "why": base["why"], "source": "seed", **s}
             sid = s.get("song_id") or unique_id(slugify(f"{s['artist']}-{s['title']}"), st["songs"])
             st["songs"][sid] = {}
             if s.get("path_id") and s["path_id"] not in st["paths"]:
@@ -314,6 +325,31 @@ def cmd_song(ctx, args):
             events.append(ctx.ev("song_added", dict(s, song_id=sid)))
         res, _ = ctx.commit(events, "utwory: nowe")
         return out({"ok": True, **res, "song_ids": [e["payload"]["song_id"] for e in events]})
+    if args.action == "suggest":
+        from .songs import suggest
+        axis, level = args.axis, args.level
+        if args.path_id:
+            path = _get_path(st, args.path_id)
+            axis = axis or path["topic_axis"]
+        if level is None and st["profile"] and axis:
+            level = (st["profile"]["axes"].get(axis) or {}).get("level")
+        return out({"ok": True, **suggest(st, axis, args.technique, level)})
+    if args.action == "verify":
+        from .songs import verify
+        if args.song_id:
+            if args.song_id not in st["songs"]:
+                raise GtError(f"Nieznany utwór '{args.song_id}'")
+            song = st["songs"][args.song_id]
+            res = verify(ctx.store.home, song["artist"], song["title"])
+            payload = {k: res.get(k) for k in ("url", "tuning", "songsterr_difficulty", "length_s",
+                                               "musicbrainz_id", "guitar_parts")}
+            payload.update(song_id=args.song_id, verified=res["verified"], sources=res["sources"])
+            if res["verified"] or not res["errors"]:
+                ctx.commit([ctx.ev("song_verified", payload)])
+            return out({"ok": True, **res})
+        if not (args.artist and args.title):
+            raise GtError("verify wymaga song_id albo --artist i --title", code=2)
+        return out({"ok": True, **verify(ctx.store.home, args.artist, args.title)})
     if args.action == "status":
         if args.song_id not in st["songs"]:
             raise GtError(f"Nieznany utwór '{args.song_id}'")
@@ -413,6 +449,14 @@ def cmd_state(ctx, args):
                          "deadline": p["deadline"], "days_since_touch": p["days_since_touch"],
                          "neglected": p["neglected"], "exercises": len(p["exercises"])}
                    for pid, p in st["paths"].items()}})
+
+
+def cmd_signals(ctx, args):
+    from .signals import compute_signals
+    ctx.require_init()
+    st = ctx.state()
+    out({"ok": True, "as_of": st["as_of"], "signals": compute_signals(st, ctx.store.config, ctx.today),
+         "pending_changes": st["pending_changes"]})
 
 
 def cmd_validate(ctx, args):
@@ -521,11 +565,17 @@ def build_parser():
     s.set_defaults(fn=cmd_session)
 
     s = sub.add_parser("song")
-    s.add_argument("action", choices=["list", "add", "status"])
+    s.add_argument("action", choices=["list", "add", "status", "suggest", "verify"])
     s.add_argument("song_id", nargs="?")
     s.add_argument("status", nargs="?", choices=C.SONG_STATUSES)
     s.add_argument("--from", dest="input", default="-")
     s.add_argument("--note")
+    s.add_argument("--path", dest="path_id")
+    s.add_argument("--axis", choices=C.AXES)
+    s.add_argument("--technique")
+    s.add_argument("--level", type=int)
+    s.add_argument("--artist")
+    s.add_argument("--title")
     s.set_defaults(fn=cmd_song)
 
     s = sub.add_parser("plan")
@@ -551,6 +601,7 @@ def build_parser():
     s.add_argument("--full", action="store_true")
     s.set_defaults(fn=cmd_state)
     sub.add_parser("validate").set_defaults(fn=cmd_validate)
+    sub.add_parser("signals", help="Sygnały postępu i braku postępu dla profile-keepera").set_defaults(fn=cmd_signals)
 
     s = sub.add_parser("report")
     s.add_argument("--out")

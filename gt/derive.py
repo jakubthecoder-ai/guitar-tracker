@@ -167,6 +167,11 @@ def derive(events: list, config: dict, today: date) -> dict:
             st["songs"][p["song_id"]] = song
             if p.get("path_id") in st["paths"]:
                 st["paths"][p["path_id"]]["songs"].append(p["song_id"])
+        elif t == "song_verified" and p["song_id"] in st["songs"]:
+            song = st["songs"][p["song_id"]]
+            song.update({k: v for k, v in p.items() if k != "song_id" and k != "verified"})
+            song["verified_at"] = ts[:10] if p["verified"] else None
+            song["verification"] = "ok" if p["verified"] else "not_found"
         elif t == "song_status_changed" and p["song_id"] in st["songs"]:
             song = st["songs"][p["song_id"]]
             song["status"] = p["status"]
@@ -184,7 +189,7 @@ def derive(events: list, config: dict, today: date) -> dict:
 
     st["sessions"] = sorted(sessions.values(), key=lambda s: s["started"])
     st["pending_changes"] = [c for c in changes.values() if c["status"] == "pending"]
-    _finalize(st, logs, config, today)
+    _finalize(st, logs, config, today, events)
     return st
 
 
@@ -238,7 +243,7 @@ def _apply_log(st: dict, ev: dict, config: dict) -> None:
                 ex["burst_bpm"] = burst
 
 
-def _finalize(st: dict, logs: list, config: dict, today: date) -> None:
+def _finalize(st: dict, logs: list, config: dict, today: date, events: list = ()) -> None:
     window = config["trend_window_days"]
     for path in st["paths"].values():
         ref = path["last_touch"] or path["created"]
@@ -319,7 +324,7 @@ def _finalize(st: dict, logs: list, config: dict, today: date) -> None:
     st["volume"] = {"minutes_7d": minutes_between(0, 7), "minutes_prev_7d": minutes_between(7, 14),
                     "minutes_prev_8_28d": minutes_between(7, 28),
                     "sessions_14d": sum(1 for s in st["sessions"] if (today - _d(s["started"])).days < 14)}
-    days = sorted({_d(e["ts"]) for e in logs})
+    days = sorted({_d(e["ts"]) for e in logs} | {_d(e["ts"]) for e in events if e["type"] == "cold_check"})
     st["practice_days"] = [d.isoformat() for d in days]
     st["days_since_practice"] = (today - days[-1]).days if days else None
     st["active_paths"] = [pid for pid, p in st["paths"].items() if p["status"] == "active"]

@@ -55,7 +55,7 @@ wybranej ścieżki (równolegle), zamiast samemu generować ćwiczenia.
 
 W `.agents/skills/` (Claude Code widzi je przez symlink `.claude/skills`):
 `gt-core` (zasady, kontrakty, taksonomia, pedagogika), `gt-placement`, `gt-new-path`, `gt-session`, `gt-log`,
-`gt-report`.
+`gt-report`, `gt-retro` (sygnały, żywy profil), `gt-songs` (dobór i weryfikacja utworów).
 
 ## Dla deweloperów
 

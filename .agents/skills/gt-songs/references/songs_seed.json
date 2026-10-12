@@ -1,0 +1,677 @@
+{
+ "version": 1,
+ "note": "Lista przygotowana ręcznie. Poziom L1–L5 orientacyjny; tempo/strój/trudność ustala gt song verify (Songsterr, MusicBrainz).",
+ "songs": [
+  {
+   "artist": "Deep Purple",
+   "title": "Smoke on the Water",
+   "level": 1,
+   "axes": [
+    "repertoire",
+    "ear"
+   ],
+   "techniques": [
+    "power chords",
+    "riff"
+   ],
+   "role": "rhythm",
+   "why": "Klasyczny riff na start; dobry do zdejmowania ze słuchu"
+  },
+  {
+   "artist": "Black Sabbath",
+   "title": "Paranoid",
+   "level": 1,
+   "axes": [
+    "repertoire",
+    "technique-picking"
+   ],
+   "techniques": [
+    "power chords",
+    "downpicking",
+    "palm mute"
+   ],
+   "role": "rhythm",
+   "why": "Szybkie ósemki power chordami – pierwszy krok do downpickingu"
+  },
+  {
+   "artist": "AC/DC",
+   "title": "Highway to Hell",
+   "level": 1,
+   "axes": [
+    "repertoire",
+    "rhythm-timing"
+   ],
+   "techniques": [
+    "open chords",
+    "groove"
+   ],
+   "role": "rhythm",
+   "why": "Groove i przestrzeń między akordami"
+  },
+  {
+   "artist": "AC/DC",
+   "title": "Back in Black",
+   "level": 2,
+   "axes": [
+    "repertoire",
+    "rhythm-timing"
+   ],
+   "techniques": [
+    "riff",
+    "muting",
+    "groove"
+   ],
+   "role": "rhythm",
+   "why": "Precyzyjne tłumienie i timing w riffie"
+  },
+  {
+   "artist": "Nirvana",
+   "title": "Smells Like Teen Spirit",
+   "level": 1,
+   "axes": [
+    "repertoire",
+    "rhythm-timing"
+   ],
+   "techniques": [
+    "power chords",
+    "muted strums"
+   ],
+   "role": "rhythm",
+   "why": "Ghost strumming i dynamika"
+  },
+  {
+   "artist": "Led Zeppelin",
+   "title": "Black Dog",
+   "level": 3,
+   "axes": [
+    "rhythm-timing",
+    "repertoire"
+   ],
+   "techniques": [
+    "riff",
+    "odd phrasing"
+   ],
+   "role": "rhythm",
+   "why": "Riff przesunięty względem metrum – trening liczenia"
+  },
+  {
+   "artist": "Metallica",
+   "title": "Enter Sandman",
+   "level": 2,
+   "axes": [
+    "technique-picking",
+    "repertoire"
+   ],
+   "techniques": [
+    "downpicking",
+    "palm mute"
+   ],
+   "role": "rhythm",
+   "why": "Umiarkowany downpicking, dobra rozgrzewka repertuarowa"
+  },
+  {
+   "artist": "Metallica",
+   "title": "Seek & Destroy",
+   "level": 3,
+   "axes": [
+    "technique-picking",
+    "repertoire"
+   ],
+   "techniques": [
+    "downpicking",
+    "palm mute"
+   ],
+   "role": "rhythm",
+   "why": "Downpicking w średnim tempie, długie partie"
+  },
+  {
+   "artist": "Metallica",
+   "title": "Master of Puppets",
+   "level": 4,
+   "axes": [
+    "technique-picking",
+    "repertoire"
+   ],
+   "techniques": [
+    "downpicking",
+    "palm mute",
+    "string crossing"
+   ],
+   "role": "rhythm",
+   "why": "Wzorcowy test wytrzymałości downpickingu ze zmianą strun"
+  },
+  {
+   "artist": "Metallica",
+   "title": "Battery",
+   "level": 4,
+   "axes": [
+    "technique-picking",
+    "repertoire"
+   ],
+   "techniques": [
+    "downpicking",
+    "palm mute"
+   ],
+   "role": "rhythm",
+   "why": "Szybki downpicking, główny riff jako ćwiczenie interwałowe"
+  },
+  {
+   "artist": "Megadeth",
+   "title": "Symphony of Destruction",
+   "level": 2,
+   "axes": [
+    "technique-picking",
+    "repertoire"
+   ],
+   "techniques": [
+    "palm mute",
+    "downpicking"
+   ],
+   "role": "rhythm",
+   "why": "Wolny, ciasny palm mute"
+  },
+  {
+   "artist": "Megadeth",
+   "title": "Holy Wars... The Punishment Due",
+   "level": 5,
+   "axes": [
+    "technique-picking",
+    "repertoire"
+   ],
+   "techniques": [
+    "alternate picking",
+    "palm mute",
+    "string crossing"
+   ],
+   "role": "rhythm",
+   "why": "Szybkie alternate i zmiany strun – cel zaawansowany"
+  },
+  {
+   "artist": "Slayer",
+   "title": "Raining Blood",
+   "level": 4,
+   "axes": [
+    "technique-picking",
+    "repertoire"
+   ],
+   "techniques": [
+    "tremolo picking",
+    "palm mute"
+   ],
+   "role": "rhythm",
+   "why": "Tremolo picking i wytrzymałość"
+  },
+  {
+   "artist": "Iron Maiden",
+   "title": "The Trooper",
+   "level": 3,
+   "axes": [
+    "technique-picking",
+    "rhythm-timing"
+   ],
+   "techniques": [
+    "gallops",
+    "harmony leads"
+   ],
+   "role": "rhythm",
+   "why": "Galopki – rytmiczna precyzja"
+  },
+  {
+   "artist": "Iron Maiden",
+   "title": "Run to the Hills",
+   "level": 3,
+   "axes": [
+    "technique-picking",
+    "rhythm-timing"
+   ],
+   "techniques": [
+    "gallops"
+   ],
+   "role": "rhythm",
+   "why": "Galopki w szybszym tempie"
+  },
+  {
+   "artist": "Iron Maiden",
+   "title": "Aces High",
+   "level": 4,
+   "axes": [
+    "technique-picking",
+    "improvisation"
+   ],
+   "techniques": [
+    "alternate picking",
+    "gallops"
+   ],
+   "role": "lead",
+   "why": "Szybkie frazy alternate picking w solówkach"
+  },
+  {
+   "artist": "Pantera",
+   "title": "Walk",
+   "level": 2,
+   "axes": [
+    "rhythm-timing",
+    "tone-gear"
+   ],
+   "techniques": [
+    "groove",
+    "palm mute",
+    "drop tuning"
+   ],
+   "role": "rhythm",
+   "why": "Groove za bitem, ciasne high gain"
+  },
+  {
+   "artist": "Ozzy Osbourne",
+   "title": "Crazy Train",
+   "level": 4,
+   "axes": [
+    "technique-picking",
+    "improvisation"
+   ],
+   "techniques": [
+    "alternate picking",
+    "riff",
+    "solo"
+   ],
+   "role": "lead",
+   "why": "Riff z ostrym alternate; solo jako stretch"
+  },
+  {
+   "artist": "Guns N' Roses",
+   "title": "Sweet Child O' Mine",
+   "level": 3,
+   "axes": [
+    "technique-picking",
+    "improvisation"
+   ],
+   "techniques": [
+    "string skipping",
+    "alternate picking",
+    "bends"
+   ],
+   "role": "lead",
+   "why": "Intro to klasyczne ćwiczenie string skippingu"
+  },
+  {
+   "artist": "Dream Theater",
+   "title": "The Glass Prison",
+   "level": 5,
+   "axes": [
+    "technique-picking",
+    "rhythm-timing"
+   ],
+   "techniques": [
+    "alternate picking",
+    "odd meter",
+    "palm mute"
+   ],
+   "role": "rhythm",
+   "why": "Prog thrash – szybkie alternate w nieparzystych metrach"
+  },
+  {
+   "artist": "Children of Bodom",
+   "title": "Hate Me!",
+   "level": 5,
+   "axes": [
+    "technique-picking",
+    "technique-legato"
+   ],
+   "techniques": [
+    "alternate picking",
+    "sweep"
+   ],
+   "role": "lead",
+   "why": "Neoklasyczne frazy – cel zaawansowany"
+  },
+  {
+   "artist": "Van Halen",
+   "title": "Eruption",
+   "level": 5,
+   "axes": [
+    "technique-legato"
+   ],
+   "techniques": [
+    "tapping",
+    "legato",
+    "tremolo picking"
+   ],
+   "role": "lead",
+   "why": "Ikona tappingu"
+  },
+  {
+   "artist": "Joe Satriani",
+   "title": "Satch Boogie",
+   "level": 5,
+   "axes": [
+    "technique-legato",
+    "technique-picking"
+   ],
+   "techniques": [
+    "legato",
+    "tapping",
+    "alternate picking"
+   ],
+   "role": "lead",
+   "why": "Legato i tapping w rockowym kontekście"
+  },
+  {
+   "artist": "Ozzy Osbourne",
+   "title": "Mr. Crowley",
+   "level": 4,
+   "axes": [
+    "technique-legato",
+    "improvisation"
+   ],
+   "techniques": [
+    "legato",
+    "alternate picking",
+    "phrasing"
+   ],
+   "role": "lead",
+   "why": "Neoklasyczne solo z legato"
+  },
+  {
+   "artist": "Dream Theater",
+   "title": "Erotomania",
+   "level": 5,
+   "axes": [
+    "technique-legato",
+    "technique-picking"
+   ],
+   "techniques": [
+    "sweep",
+    "legato",
+    "alternate picking"
+   ],
+   "role": "lead",
+   "why": "Sweep i legato w prog metalu (wymienione w researchu)"
+  },
+  {
+   "artist": "Dream Theater",
+   "title": "Overture 1928",
+   "level": 5,
+   "axes": [
+    "technique-legato",
+    "technique-picking"
+   ],
+   "techniques": [
+    "sweep",
+    "legato"
+   ],
+   "role": "lead",
+   "why": "Sweep arpeggia – instrumental prog (wymienione w researchu)"
+  },
+  {
+   "artist": "B.B. King",
+   "title": "The Thrill Is Gone",
+   "level": 2,
+   "axes": [
+    "improvisation",
+    "ear"
+   ],
+   "techniques": [
+    "bends",
+    "vibrato",
+    "phrasing"
+   ],
+   "role": "lead",
+   "why": "Mało dźwięków, dużo frazowania – vibrato i bendy"
+  },
+  {
+   "artist": "Albert King",
+   "title": "Born Under a Bad Sign",
+   "level": 2,
+   "axes": [
+    "improvisation",
+    "rhythm-timing"
+   ],
+   "techniques": [
+    "bends",
+    "riff"
+   ],
+   "role": "lead",
+   "why": "Bendy w stylu Alberta Kinga, prosty riff"
+  },
+  {
+   "artist": "John Lee Hooker",
+   "title": "Boom Boom",
+   "level": 1,
+   "axes": [
+    "rhythm-timing",
+    "improvisation"
+   ],
+   "techniques": [
+    "blues riff",
+    "shuffle"
+   ],
+   "role": "rhythm",
+   "why": "Shuffle i call & response (wymienione w researchu)"
+  },
+  {
+   "artist": "Stevie Ray Vaughan",
+   "title": "Pride and Joy",
+   "level": 3,
+   "axes": [
+    "improvisation",
+    "rhythm-timing"
+   ],
+   "techniques": [
+    "shuffle",
+    "bends",
+    "double stops"
+   ],
+   "role": "lead",
+   "why": "Teksański shuffle i agresywne bendy"
+  },
+  {
+   "artist": "Stevie Ray Vaughan",
+   "title": "Texas Flood",
+   "level": 4,
+   "axes": [
+    "improvisation"
+   ],
+   "techniques": [
+    "bends",
+    "vibrato",
+    "slow blues"
+   ],
+   "role": "lead",
+   "why": "Slow blues – ekspresja (wymienione w researchu)"
+  },
+  {
+   "artist": "Gary Moore",
+   "title": "Still Got the Blues",
+   "level": 3,
+   "axes": [
+    "improvisation"
+   ],
+   "techniques": [
+    "bends",
+    "vibrato",
+    "sustain"
+   ],
+   "role": "lead",
+   "why": "Śpiewające bendy i vibrato"
+  },
+  {
+   "artist": "Pink Floyd",
+   "title": "Comfortably Numb",
+   "level": 3,
+   "axes": [
+    "improvisation"
+   ],
+   "techniques": [
+    "bends",
+    "phrasing"
+   ],
+   "role": "lead",
+   "why": "Solo Gilmoura – przestrzeń i bendy w stroju"
+  },
+  {
+   "artist": "Pink Floyd",
+   "title": "Wish You Were Here",
+   "level": 2,
+   "axes": [
+    "repertoire",
+    "improvisation"
+   ],
+   "techniques": [
+    "acoustic",
+    "licks"
+   ],
+   "role": "lead",
+   "why": "Proste licki i frazowanie"
+  },
+  {
+   "artist": "Jimi Hendrix",
+   "title": "Red House",
+   "level": 3,
+   "axes": [
+    "improvisation"
+   ],
+   "techniques": [
+    "slow blues",
+    "bends",
+    "double stops"
+   ],
+   "role": "lead",
+   "why": "Slow blues z dwudźwiękami"
+  },
+  {
+   "artist": "Cream",
+   "title": "Crossroads",
+   "level": 3,
+   "axes": [
+    "improvisation",
+    "technique-picking"
+   ],
+   "techniques": [
+    "minor pentatonic",
+    "phrasing"
+   ],
+   "role": "lead",
+   "why": "Szybkie frazy pentatoniczne Claptona"
+  },
+  {
+   "artist": "ZZ Top",
+   "title": "La Grange",
+   "level": 3,
+   "axes": [
+    "rhythm-timing",
+    "improvisation"
+   ],
+   "techniques": [
+    "boogie",
+    "pinch harmonics"
+   ],
+   "role": "rhythm",
+   "why": "Boogie i pinch harmonics"
+  },
+  {
+   "artist": "Pink Floyd",
+   "title": "Money",
+   "level": 2,
+   "axes": [
+    "rhythm-timing"
+   ],
+   "techniques": [
+    "7/4",
+    "riff"
+   ],
+   "role": "rhythm",
+   "why": "Łagodne wejście w 7/4"
+  },
+  {
+   "artist": "Soundgarden",
+   "title": "Outshined",
+   "level": 2,
+   "axes": [
+    "rhythm-timing",
+    "tone-gear"
+   ],
+   "techniques": [
+    "7/4",
+    "drop tuning"
+   ],
+   "role": "rhythm",
+   "why": "Riff w 7/4 w obniżonym stroju"
+  },
+  {
+   "artist": "Rush",
+   "title": "YYZ",
+   "level": 4,
+   "axes": [
+    "rhythm-timing",
+    "technique-picking"
+   ],
+   "techniques": [
+    "odd meter",
+    "riff"
+   ],
+   "role": "rhythm",
+   "why": "Intro w nieparzystym metrum"
+  },
+  {
+   "artist": "Tool",
+   "title": "Schism",
+   "level": 3,
+   "axes": [
+    "rhythm-timing"
+   ],
+   "techniques": [
+    "odd meter",
+    "changing meter"
+   ],
+   "role": "rhythm",
+   "why": "Zmienne metrum – liczenie grup"
+  },
+  {
+   "artist": "Dream Theater",
+   "title": "Pull Me Under",
+   "level": 3,
+   "axes": [
+    "rhythm-timing",
+    "repertoire"
+   ],
+   "techniques": [
+    "riff",
+    "palm mute"
+   ],
+   "role": "rhythm",
+   "why": "Przystępny prog metal – riffy"
+  },
+  {
+   "artist": "Periphery",
+   "title": "Icarus Lives!",
+   "level": 4,
+   "axes": [
+    "rhythm-timing",
+    "tone-gear"
+   ],
+   "techniques": [
+    "djent",
+    "syncopation",
+    "extended range"
+   ],
+   "role": "rhythm",
+   "why": "Synkopy djent; grupowania na 4/4"
+  },
+  {
+   "artist": "Meshuggah",
+   "title": "Bleed",
+   "level": 5,
+   "axes": [
+    "rhythm-timing",
+    "technique-picking"
+   ],
+   "techniques": [
+    "polyrhythm",
+    "8-string",
+    "picking endurance"
+   ],
+   "role": "rhythm",
+   "why": "Polirytmia i wytrzymałość – cel ekstremalny"
+  }
+ ]
+}
