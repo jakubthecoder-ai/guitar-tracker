@@ -1,0 +1,6 @@
+{"title": "Downpicking 200 BPM", "goal": "Ósemki downpickingiem 200 BPM przez 60 s, luźno",
+ "topic_axis": "technique-picking", "primary_metric": {"type": "bpm", "target": 200, "unit": "BPM 8ths 60s"},
+ "deadline": "2027-02-28", "priority": 4, "baseline": {"bpm": 150}, "created_from": "user",
+ "milestones": [{"id": "m1", "desc": "170 BPM 60 s", "due": "2026-11-30"}, {"id": "m2", "desc": "185 BPM", "due": "2027-01-15"}],
+ "exercises": [{"title": "Interwały 60/30 ósemki", "technique": "downpicking", "subdivision": "8ths",
+   "bpm_start": 150, "bpm_target": 200, "stage": "speed", "primary": true}]}

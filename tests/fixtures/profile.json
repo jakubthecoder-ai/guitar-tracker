@@ -1,0 +1,7 @@
+{"name": "Test", "years_playing": 6, "genres": ["metal", "blues", "prog"], "weekly_minutes": 300,
+ "sessions_per_week": 5, "intention": "Po kolacji, pn-pt, 60 min",
+ "gear": {"guitar": "7-string", "tuning": "B standard", "amp": "modeller"},
+ "axes": {"technique-picking": {"level": 3, "note": "16-tki ~130 czysto"}, "technique-legato": {"level": 2},
+          "rhythm-timing": {"level": 2, "note": "rzadko z metronomem"}, "fretboard-theory": {"level": 2},
+          "ear": {"level": 1}, "repertoire": {"level": 3}, "improvisation": {"level": 2}, "tone-gear": {"level": 3}},
+ "benchmarks": {"downpick_8ths_60s": 150, "alt_16ths_one_string": 130}}

@@ -1,0 +1,5 @@
+{"title": "Frazowanie bluesowe", "goal": "Nagrać 3 chorusy solo w 12-bar z motywami i dynamiką",
+ "topic_axis": "improvisation", "primary_metric": {"type": "custom", "target": 4, "unit": "ocena rubryki 1-5"},
+ "deadline": "2026-12-20", "priority": 3, "baseline": {"value": 2},
+ "milestones": [{"id": "w3", "desc": "bendy w stroju"}, {"id": "w8", "desc": "nagranie 3 chorusów"}],
+ "exercises": [{"title": "Bendy do tonu z tunerem", "stage": "learn"}, {"title": "Call and response 2 takty", "stage": "learn"}]}
